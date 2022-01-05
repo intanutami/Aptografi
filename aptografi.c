@@ -2,6 +2,7 @@
 #include <stdlib.h>		//Header yang di gunakan untuk standar input output pada bahasa C
 #include <string.h>		//Header yang di gunakan untuk operasi string pada bahasa C
 #include <time.h>		//Header yang di gunakan untuk operasi pada bahasa C
+
 time_t waktuserver;	
 char namaFile[]="loginRecord.txt";
 
@@ -11,8 +12,8 @@ typedef struct user{
 	char password [10];
 	char email [50];
 }User;
-User u;		
-
+User u;	
+	
 typedef struct {
 	char *nama[50];
 	char *telepon[13];
@@ -25,28 +26,31 @@ typedef struct {
 	char *tahun[4];
 }Date;
 
+void waktu(){
+	time(&waktuserver);
+	struct tm* waktu = localtime(&waktuserver);
+	FILE *hasil;
+	hasil = fopen("transaksi.txt", "w");
+	printf (" Waktu Pemesanan : %s", asctime (waktu));
+	fprintf (hasil, " Waktu Pemesanan : %s", asctime (waktu));
+	fclose(hasil);
+}
+
 void welcome(){
 	printf("\n\n\n\n\n\t\t************************************************************\n");
-    printf("\t\t  ========================================================\n\n");
-    printf("\t\t\t    SELAMAT DATANG DI SISTEM PELAYANAN\n");
-    printf("\t\t\t	     APTOGRAFI \n");
-    printf("\t\t\t	JL.IMAM BONJOL NO.7 DENPASAR\n");
-    printf("\t\t\t      NOMOR TELEPON: (0361) 978 154\n");
-    printf("\t\t\t      EMAIL: aptografi@gmail.com\n");
-    printf("\t\t\t    AHLI FOTOGRAFI DAN VIDEOGRAFI \n\n");
-    printf("\t\t  ========================================================");
+	printf("\t\t  ========================================================\n\n");
+	printf("\t\t\t    SELAMAT DATANG DI SISTEM PELAYANAN\n");
+	printf("\t\t\t	     APTOGRAFI \n");
+	printf("\t\t\t	JL.IMAM BONJOL NO.7 DENPASAR\n");
+	printf("\t\t\t      NOMOR TELEPON: (0361) 978 154\n");
+	printf("\t\t\t      EMAIL: aptografi@gmail.com\n");
+	printf("\t\t\t    AHLI FOTOGRAFI DAN VIDEOGRAFI \n\n");
+	printf("\t\t  ========================================================");
 	printf("\n\t\t************************************************************");
 	printf("\n\n\n\n\n Press any key to continue......");
 	getch();
 	system("cls");
 }
-
-void waktu(){
-	time(&waktuserver);
-	struct tm*waktu = localtime (&waktuserver);
-	printf ("\n\t\t\t||==========Tanggal: %d/%d/%d=========||\n\n", waktu -> tm_mday, waktu ->tm_mon +1, waktu -> tm_year +1900);
-}
-
 
 void masuk(){
 	void daftar();
@@ -90,7 +94,7 @@ void masuk(){
 	// Membeaca file "logRecord.txt"
 	while (fread(&u, sizeof(u),1,record)){
 		 /*  Mengkomparasi username serta password yang diinput user ke dalam fungsi
-            masuk() dengan username serta password yang sudah terdaftar */
+            	masuk() dengan username serta password yang sudah terdaftar */
 		if(strcmp(username, u.username)==0 && strcmp(password, u.password)==0){
 			printf ("\t\t\t||====================||\n");
 			printf ("\t\t\t|| 	Login Berhasil!	 ||\n");
@@ -167,8 +171,6 @@ void daftar(){
 	masuk ();	
 }
 
-
-
 void pilmenu(){
 	//variabel pilihan untuk menyimpan pilihan yang diinput user pada switch case
 	int pilihan;
@@ -181,7 +183,7 @@ void pilmenu(){
 	printf ("\t\t\t||======================================||\n");
 	printf ("\t\t\t||	1	|	Masuk		||\n");
 	printf ("\t\t\t||	2	|	Registrasi	||\n");
-	printf ("\t\t\t||	4	|	Keluar		||\n");
+	printf ("\t\t\t||	3	|	Keluar		||\n");
 	printf ("\t\t\t||======================================||\n");
 	printf ("\t\t\t||======================================||\n");
 	printf ("\t\t\t|| Masukkan pilihan anda : ");
@@ -204,11 +206,86 @@ void pilmenu(){
 		default:
 			printf ("Error! Silahkan Masukkan Plihan dengan Benar \n");
 			break;
+		goto instruksi;
 	}
 }
 
+void tentangPembuat(){
+	char buff[100];
+	FILE*pembuat;
+	if((pembuat=fopen("tentangPembuat.txt", "r"))==NULL){
+		printf("File Kosong!");
+	}
+	while(fgets(buff, sizeof(buff), pembuat)){
+		printf("%s",buff);
+	}
+	fclose(pembuat);
+}
 
-Date InputTanggalPemesanan (Date pemesanan){
+void tentangAptografi(){
+	char buff[100];
+	FILE*aptografi;
+	if((aptografi=fopen("tentangAptografi.txt", "r"))==NULL){
+	printf("File Kosong!");
+	}
+	while(fgets(buff, sizeof(buff), aptografi)){
+	printf("%s",buff);
+	}
+	fclose(aptografi);
+}
+
+void informasiPaket(){
+	char buff[100];
+	FILE*informasiPaket;
+	if((informasiPaket=fopen("informasiPaket.txt", "r"))==NULL){
+	printf("File Kosong!");
+	}
+	while(fgets(buff, sizeof(buff), informasiPaket)){
+	printf("%s",buff);
+	}
+	fclose(informasiPaket);
+}
+
+void menu1(){
+	//variabel pilihan untuk menyimpan pilihan yang diinput user pada switch case
+	int pilihan;
+	
+	menu:
+	printf ("\t\t\t||======================================||\n");
+	printf ("\t\t\t|| 	 	MENU 		||\n");
+	printf ("\t\t\t||======================================||\n");
+	printf ("\t\t\t||	No	|	Pilihan 	||\n");
+	printf ("\t\t\t||======================================||\n");
+	printf ("\t\t\t||	1	|Tentang Pembuat||\n");
+	printf ("\t\t\t||	2	|Tentang Aptografi	||\n");
+	printf ("\t\t\t||	3	|Informasi Paket, Harga,||\n"); 
+	printf ("\t\t\t||		|dan Diskon||\n");
+	printf ("\t\t\t||	4	|Keluar			||\n");
+	printf ("\t\t\t||======================================||\n");
+	printf ("\t\t\t||======================================||\n");
+	printf ("\t\t\tTekan karakter acak untuk lanjut ke Registrasi Pemesanan...\n");
+	printf ("\t\t\t|| Masukkan pilihan anda : ");
+	scanf ("%d", &pilihan);
+	printf ("\t\t\t||======================================||\n");
+	system ("cls");
+	if (pilihan == 1){
+		tentangPembuat();
+		goto menu;
+	}
+	else if (pilihan == 2){
+		tentangAptografi();
+		goto menu;
+	}
+	else if (pilihan == 3){
+		informasiPaket();
+		goto menu;
+	}
+	else if (pilihan == 4){
+		exit(1);
+	}		
+}
+
+Date InputTanggalPemesanan (){
 	printf ("|===========================================================================|");
 	printf ("\n|                               [APTOGRAFI]                                 |");
 	printf ("\n|                              Membantu Anda                                |");
@@ -216,14 +293,8 @@ Date InputTanggalPemesanan (Date pemesanan){
 	printf ("\n=============================================================================");
 	printf ("\n|                           SILAHKAN REGISTRASI                             |");
 	printf ("\n=============================================================================");
-	
-	printf ("\n\nTanggal Pesan		: ");
-	scanf ("%s", &pemesanan.tanggal);
-	printf ("Bulan Pesan		: ");
-	scanf ("%s", &pemesanan.bulan);
-	printf ("Tahun Pesan		: ");
-	scanf ("%s", &pemesanan.tahun);
-	return pemesanan;
+
+	printf ("\n"); waktu();
 }
 
 Identitas InputDataCustomer (Identitas customer){
@@ -233,69 +304,49 @@ Identitas InputDataCustomer (Identitas customer){
 	scanf ("%s", &customer.telepon);
 	printf ("Alamat			: ");
 	scanf ("%s", &customer.alamat);
-	return customer;	
+	return customer;
 }
 
 Date InputTanggalDigunakan (Date digunakan){
 	printf ("\nTanggal Digunakan	: ");
-	scanf ("%s", &digunakan.tanggal);
-	printf ("Bulan Digunakan		: ");
-	scanf ("%s", &digunakan.bulan);
-	printf ("Tahun Digunakan		: ");
-	scanf ("%s", &digunakan.tahun);
+	scanf ("%s", &digunakan.tanggal );
 	return digunakan;
 }
 
 void TampilkanDaftarMenu(){
-	printf ("|===========================================================================|");
-	printf ("\n|                               [APTOGRAFI]                                 |");
-	printf ("\n|                              Membantu Anda                                |");
-	printf ("\n|                   Menentukan Paket Fotografi & Videografi                 |");
-	printf ("\n=============================================================================");
-	printf ("\n|     |                                                                     |");
-	printf ("\n| No. |                   SILAHKAN PILIH MENU PAKET                         |");
-	printf ("\n|     |                                                                     |");
-	printf ("\n|===========================================================================|");
-	printf ("\n|     |                                                                     |");
-	printf ("\n| 1.  | Prewedding                                                          |");
-	printf ("\n|     |                                                                     |");
-	printf ("\n| 2.  | Dokumenter                                                          |");
-	printf ("\n|     |                                                                     |");
-	printf ("\n=============================================================================");
+char buff[100];
+	FILE*in;
+	if((in=fopen("pilMenuPaket.txt", "r"))==NULL){
+		printf("File Kosong!");
+	}
+	while(fgets(buff, sizeof(buff), in)){
+		printf("%s",buff);
+	}
+	fclose(in);
 }
 
 void TampilkanExtraOptionPrawedding(){
-	printf ("=============================================================================");
-	printf ("\n|                          EXTRA OPTION PREWEDDING                          |");
-	printf ("\n|===========================================================================|");
-	printf ("\n| No. |                     Opsi Tambahan                   |     Harga     |");
-	printf ("\n|===========================================================================|");
-	printf ("\n|     |                                                     |               |");
-	printf ("\n| 1.  | Album Foto                                          | Rp. 330000    |");
-	printf ("\n|     |                                                     |               |");
-	printf ("\n| 2.  | All Softcopy                                        | Rp. 178000    |");
-	printf ("\n|     |                                                     |               |");
-	printf ("\n| 3.  | Bingkai 20R                                         | Rp. 120000    |");
-	printf ("\n|     |                                                     |               |");
-	printf ("\n| 4.  | Bingkai 16R                                         | Rp. 96000     |");
-	printf ("\n|     |                                                     |               |");
-	printf ("\n=============================================================================");
+	char buff[100];
+	FILE*extraPrewed;
+	if((extraPrewed=fopen("ExtraOptionalPrewedding.txt", "r"))==NULL){
+		printf("File Kosong!");
+	}
+	while(fgets(buff, sizeof(buff), extraPrewed)){
+		printf("%s",buff);
+	}
+	fclose(extraPrewed);
 }
 
 void TampilkanExtraOptionDokumenter(){
-	printf ("=============================================================================");
-	printf ("\n|                          EXTRA OPTION DOKUMENTER                          |");
-	printf ("\n|===========================================================================|");
-	printf ("\n| No. |                     Opsi Tambahan                   |     Harga     |");
-	printf ("\n|===========================================================================|");
-	printf ("\n|     |                                                     |               |");
-	printf ("\n| 1.  | Efek Monokrom                                       | Rp. 50000     |");
-	printf ("\n|     |                                                     |               |");
-	printf ("\n| 2.  | All Softcopy                                        | Rp. 100000    |");
-	printf ("\n|     |                                                     |               |");
-	printf ("\n| 3.  | Bingkai 16R                                         | Rp. 120000    |");
-	printf ("\n|     |                                                     |               |");
-	printf ("\n=============================================================================");
+	char buff[100];
+	FILE*extraDokumen;
+	if((extraDokumen=fopen("ExtraOptionDokumenter.txt", "r"))==NULL){
+		printf("File Kosong!");
+	}
+	while(fgets(buff, sizeof(buff), extraDokumen)){
+		printf("%s",buff);
+	}
+	fclose(extraDokumen);
 }
 
 int HitungHargaFotografer (int sewa_fotografer, int jumlah_fotografer){
@@ -325,24 +376,27 @@ void TampilkanHasilRegistrasi (Identitas customer, Date pesan, Date digunakan){
 	printf ("\n");
 	printf ("\n                              Alamat	: %s", customer.alamat);
 	printf ("\n");
-	printf ("\n	  	      Pemesanan Pada	: %s - %s - %s", pesan.tanggal, pesan.bulan, pesan.tahun);
+	printf ("\n");  waktu();
 	printf ("\n");
-	printf ("\n	         Akan Digunakan Pada	: %s - %s - %s", digunakan.tanggal, digunakan.bulan, digunakan.tahun);
+	printf ("\n	         Akan Digunakan Pada	: %s", digunakan.tanggal);
 	printf ("\n");
 	printf ("\n=============================================================================");
 }
 
-
-
-int main (){
 	
+int main (){
+
 	int menu;
-	int total;
-	char kembali = 'r';
+	int total, total1, total2;
+	int diskon1, diskon2;
+	int bayar;
+	int kembalian;
+	int kembaliandisc1, kembaliandisc2;
 	Identitas customer;
 	Date pemesanan, digunakan;
 	Identitas input_customer;
 	Date input_pemesanan, input_digunakan;
+	char kembali = 'r';
 	int sewa_fotografer, sewa_videografer;
 	int jumlah_fotografer, jumlah_videografer;
 	int price_fotografer, price_videografer;
@@ -351,60 +405,70 @@ int main (){
 	int pilih_opsi;
 	int harga_opsi;
 	int subtotal_opsi = 0;
-	
+
 	welcome();
-	waktu();
 	pilmenu();
-		
+	menu1();
+
+
 	while (kembali == 'r' || kembali == 'R'){
-			
+
 		system ("cls");
-	
 		pemesanan = InputTanggalPemesanan (input_pemesanan);
-		
+
 		customer = InputDataCustomer (input_customer);
-		
+
 		digunakan = InputTanggalDigunakan (input_digunakan);
 
 		system ("cls");
 		TampilkanDaftarMenu();
-		
+
 		printf ("\n\n\nSilahkan Masukkan Menu Pilihan : ");
 		scanf ("%d", &menu);
-		
+
 		system ("cls");
 		if (menu == 1){
+			FILE * hasil;
+			hasil=fopen("transaksi.txt","w");
+			fprintf(hasil, "\n PAKET PREWEDDING");
+			fclose (hasil);
 			sewa_fotografer = 400000;
 			sewa_videografer = 500000;
 			total = 0;
 			harga_opsi = 0;
-			
+
 			printf ("=============================================================================");
 			printf ("\n|                             PAKET PRAWEDDING                              |");
 			printf ("\n|                  Semakin Banyak Kamera, Semakin Estetik                   |");
-			printf ("\n=============================================================================");	
+			printf ("\n=============================================================================");
 			printf ("\n\nSilahkan Masukkan Jumlah Fotografer		: ");
 			scanf ("%d", &jumlah_fotografer);
 			printf ("\nSilahkan Masukkan Jumlah Videografer		: ");
 			scanf ("%d", &jumlah_videografer);
-			printf ("\n=============================================================================");	
-			
+			printf ("\n=============================================================================");
+			//mencetak struk
+			FILE * hasil1;
+			hasil1=fopen("transaksi.txt","w");
+			fprintf(hasil1, "\n Jumlah Fotografer : %d ", jumlah_fotografer);
+			fprintf(hasil1, "\n Jumlah Videografer : %d ", jumlah_videografer);
+			fclose (hasil1);
+
 			printf ("\n\nApakah Ingin Membeli Opsi Tambahan	(Y/N)	? ");
 			scanf (" %c", &opsi);
-			
+
 			if (opsi == 'y' || opsi == 'Y'){
-				int i = 1;		
-				system ("cls");		
-				
+				int i = 1;
+				system ("cls");
+
 				TampilkanExtraOptionPrawedding();
-				
+
 				printf ("\n\nMasukkan Jumlah Opsi	: ");
 				scanf ("%d", &jumlah_opsi);
 				printf ("\n=============================================================================\n");
-				
+
 				while (i <= jumlah_opsi){
 					printf ("\nSilahkan Pilih Opsi 	: ");
-					scanf ("%d", &pilih_opsi);			
+					scanf ("%d", &pilih_opsi);
 					if (pilih_opsi == 1){
 						harga_opsi = 330000;
 					}
@@ -423,22 +487,30 @@ int main (){
 					}
 					subtotal_opsi = subtotal_opsi + harga_opsi;
 					i++;
-				}	
-								
+				}
+
 				price_fotografer = HitungHargaFotografer (sewa_fotografer, jumlah_fotografer);
-				
+
 				price_videografer = HitungHargaVideografer (sewa_videografer, jumlah_videografer);
-				
+
 				total = total + price_fotografer + price_videografer + subtotal_opsi;
-				
+				diskon1 = total*10/100;
+				diskon2 = total*20/100;
+				total1=total-diskon1;
+				total2=total-diskon2;
+				kembaliandisc1=bayar-total1;
+				kembaliandisc2=bayar-total2;
+				kembalian=bayar-total;
+
 				TampilkanHasilRegistrasi(customer, pemesanan, digunakan);
-				
+
+
 				printf ("\n|                              RINCIAN BIAYA                                |");
 				printf ("\n=============================================================================");
 				printf ("\n");
 				printf ("\n              Harga Sewa %d Fotografer	: Rp. %d",jumlah_fotografer, price_fotografer);
 				printf ("\n");
-				printf ("\n             Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);      
+				printf ("\n             Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);
 				printf ("\n");
 				printf ("\n                         Opsi Tambahan	: Rp. %d", subtotal_opsi);
 				printf ("\n");
@@ -447,25 +519,104 @@ int main (){
 				printf ("\n	                  Total Biaya	: Rp. %d", total);
 				printf ("\n");
 				printf ("\n=============================================================================");
+				//struk
+				FILE * hasil2;
+				hasil2=fopen("transaksi.txt","w");
+				fprintf (hasil2,"\n Harga Sewa %d Fotografer	: Rp. %d",jumlah_fotografer, price_fotografer);
+				fprintf (hasil2,"\n Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);
+				fprintf (hasil2,"\n Opsi Tambahan	: Rp. %d", subtotal_opsi);
+				fprintf (hasil2,"\n Total Biaya	: Rp. %d", total);
+				fclose (hasil2);
+				if (total > 1000000){
+					printf ("\n 		Anda mendapatkan diskon sebesar 10 persen!");
+					printf ("\n");
+					printf ("\n 		Potongan harga : Rp. %d", diskon1);
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total1);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+					kembaliandisc1=bayar-total1;
+					printf ("\n		Kembalian : Rp. %d", kembaliandisc1);
+					//struk
+					FILE * hasil3;
+					hasil3=fopen("transaksi.txt","w");
+					fprintf (hasil3,"\n Potongan harga : Rp. %d", diskon1);
+					fprintf (hasil3,"\n Total Biaya : Rp. %d", total1);
+					fprintf (hasil3,"\n=============================================================================");
+					fprintf (hasil3,"\n Bayar : Rp. ");
+					fprintf (hasil3, "\n Kembalian : Rp. %d", kembaliandisc1);
+					fclose (hasil3);
+				}
+				else if (total > 5000000){
+					printf ("\n 		Anda mendapatkan diskon sebesar 20 persen!");
+					printf ("\n");
+					printf ("\n 		Potongan hagra : Rp. %d", diskon2);
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total2);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+					kembaliandisc2=bayar-total2;
+					printf ("\n		Kembalian : Rp. %d", kembaliandisc2);
+					//struk
+					FILE * hasil4;
+					hasil4=fopen("transaksi.txt","w");
+					fprintf (hasil4,"\n Potongan harga : Rp. %d", diskon1);
+					fprintf (hasil4,"\n Total Biaya : Rp. %d", total1);
+					fprintf (hasil4,"\n=============================================================================");
+					fprintf (hasil4,"\n Bayar : Rp. ");
+					fprintf (hasil4, "\n Kembalian : Rp. %d", kembaliandisc1);
+					fclose (hasil4);
+				}
+				else {
+					printf ("\n 		Potongan hagra : Rp. -");
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+					kembalian=bayar-total;
+					printf ("\n			Kembalian : Rp. %d", kembalian);
+					//struk
+					FILE * hasil5;
+					hasil5=fopen("transaksi.txt","w");
+					fprintf (hasil5,"\n Potongan harga : Rp. %d", diskon1);
+					fprintf (hasil5,"\n Total Biaya : Rp. %d", total1);
+					fprintf (hasil5,"\n=============================================================================");
+					fprintf (hasil5,"\n Bayar : Rp. ");
+					fprintf (hasil5, "\n Kembalian : Rp. %d", kembaliandisc1);
+					fclose (hasil5);
+				}
 			}
-			
+
 			else {
 				int total = 0;
-				
+
 				TampilkanHasilRegistrasi(customer, pemesanan, digunakan);
-				
+
 				price_fotografer = HitungHargaFotografer (sewa_fotografer, jumlah_fotografer);
-				
+
 				price_videografer = HitungHargaVideografer (sewa_videografer, jumlah_videografer);
-				
+
 				total = total + price_fotografer + price_videografer;
-				
+				diskon1 = total*10/100;
+				diskon2 = total*20/100;
+				total1=total-diskon1;
+				total2=total-diskon2;
+				kembaliandisc1=bayar-total1;
+				kembaliandisc2=bayar-total2;
+				kembalian=bayar-total;
+
 				printf ("\n|                              RINCIAN BIAYA                                |");
 				printf ("\n=============================================================================");
 				printf ("\n");
 				printf ("\n              Harga Sewa %d Fotografer	: Rp. %d",jumlah_fotografer, price_fotografer);
 				printf ("\n");
-				printf ("\n             Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);      
+				printf ("\n             Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);
 				printf ("\n");
 				printf ("\n                         Opsi Tambahan	: -");
 				printf ("\n");
@@ -474,10 +625,85 @@ int main (){
 				printf ("\n	                  Total Biaya	: Rp. %d", total);
 				printf ("\n");
 				printf ("\n=============================================================================");
-			} 
+				//struk
+				FILE * hasil6;
+				hasil6=fopen("transaksi.txt","w");
+				fprintf (hasil6,"\n Harga Sewa %d Fotografer	: Rp. %d",jumlah_fotografer, price_fotografer);
+				fprintf (hasil6,"\n Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);
+				fprintf (hasil6,"\n Opsi Tambahan	: Rp. %d", subtotal_opsi);
+				fprintf (hasil6,"\n Total Biaya	: Rp. %d", total);
+				fclose (hasil6);
+				if (total > 1000000){
+					printf ("\n 		Anda mendapatkan diskon sebesar 10 %!");
+					printf ("\n");
+					printf ("\n 		Potongan hagra : Rp. %d", diskon1);
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total1);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+					kembaliandisc1=bayar-total1;
+					printf ("\n		Kembalian : Rp. %d", kembaliandisc1);
+					//struk
+					FILE * hasil7;
+					hasil7=fopen("transaksi.txt","w");
+					fprintf (hasil7,"\n Potongan harga : Rp. %d", diskon1);
+					fprintf (hasil7,"\n Total Biaya : Rp. %d", total1);
+					fprintf (hasil7,"\n=============================================================================");
+					fprintf (hasil7,"\n Bayar : Rp. ");
+					fprintf (hasil7, "\n Kembalian : Rp. %d", kembaliandisc1);
+					fclose (hasil7);
+				}
+				else if (total > 5000000){
+					printf ("\n 		Anda mendapatkan diskon sebesar 20 %!");
+					printf ("\n");
+					printf ("\n 		Potongan hagra : Rp. %d", diskon2);
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total2);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+                    			kembaliandisc2=bayar-total2;
+					printf ("\n		Kembalian : Rp. %d", kembaliandisc2);
+					//struk
+					FILE * hasil8;
+					hasil8=fopen("transaksi.txt","w");
+					fprintf (hasil8,"\n Potongan harga : Rp. %d", diskon1);
+					fprintf (hasil8,"\n Total Biaya : Rp. %d", total1);
+					fprintf (hasil8,"\n=============================================================================");
+					fprintf (hasil8,"\n Bayar : Rp. ");
+					fprintf (hasil8, "\n Kembalian : Rp. %d", kembaliandisc1);
+					fclose (hasil8);
+				}
+				else {
+					printf ("\n 		Potongan hagra : Rp. -");
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+                   			kembalian=bayar-total;
+					printf ("\n			Kembalian : Rp. %d", kembalian);
+					FILE * hasil9;
+					hasil9=fopen("transaksi.txt","w");
+					fprintf (hasil9,"\n Potongan harga : Rp. %d", diskon1);
+					fprintf (hasil9,"\n Total Biaya : Rp. %d", total1);
+					fprintf (hasil9,"\n=============================================================================");
+					fprintf (hasil9,"\n Bayar : Rp. ");
+					fprintf (hasil9, "\n Kembalian : Rp. %d", kembaliandisc1);
+					fclose (hasil9);
+				}
+			}
 		}
-						
+
 		else if (menu == 2){
+			FILE * hasil4;
+			hasil4=fopen("transaksi.txt","w");
+			fprintf(hasil4, "\n PAKET DOKUMENTER");
+			fclose (hasil4);
 			sewa_fotografer = 365000;
 			sewa_videografer = 488000;
 			total = 0;
@@ -485,35 +711,41 @@ int main (){
 			int jumlah_orang;
 			int harga_perorang = 20000;
 			int price_orang;
-			
+
 			printf ("=============================================================================");
 			printf ("\n|                             PAKET DOKUMENTER                              |");
 			printf ("\n|                  Semakin Banyak Kamera, Semakin Estetik                   |");
-			printf ("\n=============================================================================");	
+			printf ("\n=============================================================================");
 			printf ("\n\nSilahkan Masukkan Jumlah Fotografer		: ");
 			scanf ("%d", &jumlah_fotografer);
 			printf ("\nSilahkan Masukkan Jumlah Videografer		: ");
 			scanf ("%d", &jumlah_videografer);
 			printf ("\nSilahkan Masukkan Jumlah Orang / Peserta	: ");
 			scanf ("%d", &jumlah_orang);
-			printf ("\n=============================================================================");	
-			
+			printf ("\n=============================================================================");
+			//mencetak history transaksi
+			FILE * hasil10;
+			hasil10=fopen("transaksi.txt","w");
+			fprintf (hasil10, "\n Jumlah Fotografer : %d ", jumlah_fotografer);
+			fprintf (hasil10, "\n Jumlah Videografer : %d ", jumlah_videografer);
+			fprintf(hasil10, "\n Jumlah Peserta : %d ", jumlah_orang );
+			fclose (hasil10);
 			printf ("\n\nApakah Ingin Membeli Opsi Tambahan	(Y/N)	? ");
 			scanf (" %c", &opsi);
-		
+
 			if (opsi == 'y' || opsi == 'Y'){
-				int i = 1;		
-				system ("cls");		
-				
+				int i = 1;
+				system ("cls");
+
 				TampilkanExtraOptionDokumenter();
-				
+
 				printf ("\n\nMasukkan Jumlah Opsi	: ");
 				scanf ("%d", &jumlah_opsi);
 				printf ("\n=============================================================================\n");
-				
+
 				while (i <= jumlah_opsi){
 					printf ("\nSilahkan Pilih Opsi 	: ");
-					scanf ("%d", &pilih_opsi);			
+					scanf ("%d", &pilih_opsi);
 					if (pilih_opsi == 1){
 						harga_opsi = 50000;
 					}
@@ -531,54 +763,148 @@ int main (){
 					i++;
 				}
 				price_fotografer = HitungHargaFotografer (sewa_fotografer, jumlah_fotografer);
-				
+
 				price_videografer = HitungHargaVideografer (sewa_videografer, jumlah_videografer);
-				
+
 				price_orang = HitungHargaPerorang (jumlah_orang, harga_perorang);
-				
+
 				total = total + price_fotografer + price_videografer + price_orang + subtotal_opsi;
-				
+
 				TampilkanHasilRegistrasi(customer, pemesanan, digunakan);
-				
+				diskon1 = total*10/100;
+				diskon2 = total*20/100;
+				total1=total-diskon1;
+				total2=total-diskon2;
+				kembaliandisc1=bayar-total1;
+				kembaliandisc2=bayar-total2;
+				kembalian=bayar-total;
+
+				printf ("\n=============================================================================");
 				printf ("\n|                              RINCIAN BIAYA                                |");
 				printf ("\n=============================================================================");
 				printf ("\n");
 				printf ("\n              Harga Sewa %d Fotografer	: Rp. %d",jumlah_fotografer, price_fotografer);
 				printf ("\n");
-				printf ("\n             Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);      
+				printf ("\n             Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);
 				printf ("\n");
-				printf ("\n                       Harga %d Orang	: Rp. %d",jumlah_orang, price_orang);      
+				printf ("\n                       Harga %d Orang	: Rp. %d",jumlah_orang, price_orang);
 				printf ("\n");
 				printf ("\n                        Opsi Tambahan	: Rp. %d", subtotal_opsi);
 				printf ("\n");
 				printf ("\n=============================================================================");
 				printf ("\n");
-				printf ("\n	                  Total Biaya	: Rp. %d", total);
+				printf ("\n	                 	 Biaya	: Rp. %d", total);
 				printf ("\n");
 				printf ("\n=============================================================================");
+				//struct
+				FILE * hasil11;
+				hasil11=fopen("transaksi.txt","w");
+				fprintf (hasil11,"\n Harga Sewa %d Fotografer	: Rp. %d",jumlah_fotografer, price_fotografer);
+				fprintf (hasil11,"\n Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);
+				fprintf (hasil11,"\n Opsi Tambahan	: Rp. %d", subtotal_opsi);
+				fprintf (hasil11,"\n Total Biaya	: Rp. %d", total);
+				fclose (hasil11);
+				
+				if (total > 1000000){
+					printf ("\n 		Anda mendapatkan diskon sebesar 10 %!");
+					printf ("\n");
+					printf ("\n 		Potongan hagra : Rp. %d", diskon1);
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total1);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+					kembaliandisc1=bayar-total1;
+					printf ("\n		Kembalian : Rp. %d", kembaliandisc1);
+					//struk
+					FILE * hasil12;
+					hasil12=fopen("transaksi.txt","w");
+					fprintf (hasil12,"\n Potongan harga : Rp. %d", diskon1);
+					fprintf (hasil12,"\n Total Biaya : Rp. %d", total1);
+					fprintf (hasil12,"\n=============================================================================");
+					fprintf (hasil12,"\n Bayar : Rp. ");
+					fprintf (hasil12, "\n Kembalian : Rp. %d", kembaliandisc1);
+					fclose (hasil12);
+				}
+				else if (total > 5000000){
+					printf ("\n 		Anda mendapatkan diskon sebesar 20 %!");
+					printf ("\n");
+					printf ("\n 		Potongan hagra : Rp. %d", diskon2);
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total2);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+                    			kembaliandisc2=bayar-total2;
+					printf ("\n		Kembalian : Rp. %d", kembaliandisc2);
+					//struk
+					FILE * hasil13;
+					hasil13=fopen("transaksi.txt","w");
+					fprintf (hasil13,"\n Potongan harga : Rp. %d", diskon2);
+					fprintf (hasil13,"\n Total Biaya : Rp. %d", total2);
+					fprintf (hasil13,"\n=============================================================================");
+					fprintf (hasil13,"\n Bayar : Rp. ");
+					fprintf (hasil13, "\n Kembalian : Rp. %d", kembaliandisc2);
+					fclose (hasil13);
+				}
+				else {
+					printf ("\n 		Potongan hagra : Rp. -");
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+                    			kembalian=bayar-total;
+					printf ("\n			Kembalian : Rp. %d", kembalian);
+					//struk
+					FILE * hasil14;
+					hasil14=fopen("transaksi.txt","w");
+					fprintf (hasil14,"\n Potongan harga : Rp. -");
+					fprintf (hasil14,"\n Total Biaya : Rp. %d", total);
+					fprintf (hasil14,"\n=============================================================================");
+					fprintf (hasil14,"\n Bayar : Rp. ");
+					fprintf (hasil14, "\n Kembalian : Rp. %d", kembalian);
+					fclose (hasil14);
+				}
 			}
-			
+
 			else {
 				int total = 0;
-				
+				int total1 =0, total2=0;
+				int diskon1, diskon2;
+				int bayar=0;
+				int kembalian = 0;
+				int kembaliandisc1=0, kembaliandisc2=0;
+
+
 				TampilkanHasilRegistrasi(customer, pemesanan, digunakan);
-				
+
 				price_fotografer = HitungHargaFotografer (sewa_fotografer, jumlah_fotografer);
-				
+
 				price_videografer = HitungHargaVideografer (sewa_videografer, jumlah_videografer);
-				
+
 				price_orang = HitungHargaPerorang (jumlah_orang, harga_perorang);
-				
+
 				total = total + price_fotografer + price_videografer + price_orang;
-				
+				diskon1 = total*10/100;
+				diskon2 = total*20/100;
+				total1=total-diskon1;
+				total2=total-diskon2;
+				kembaliandisc1=bayar-total1;
+				kembaliandisc2=bayar-total2;
+				kembalian=bayar-total;
+
 				printf ("\n|                              RINCIAN BIAYA                                |");
 				printf ("\n=============================================================================");
 				printf ("\n");
 				printf ("\n              Harga Sewa %d Fotografer	: Rp. %d",jumlah_fotografer, price_fotografer);
 				printf ("\n");
-				printf ("\n             Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);      
+				printf ("\n             Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);
 				printf ("\n");
-				printf ("\n                       Harga %d Orang	: Rp. %d",jumlah_orang, price_orang);      
+				printf ("\n                       Harga %d Orang	: Rp. %d",jumlah_orang, price_orang);
 				printf ("\n");
 				printf ("\n                        Opsi Tambahan	: -");
 				printf ("\n");
@@ -587,16 +913,91 @@ int main (){
 				printf ("\n	                  Total Biaya	: Rp. %d", total);
 				printf ("\n");
 				printf ("\n=============================================================================");
-			} 
+				//struct
+				FILE * hasil15;
+				hasil15=fopen("transaksi.txt","w");
+				fprintf (hasil15,"\n Harga Sewa %d Fotografer	: Rp. %d",jumlah_fotografer, price_fotografer);
+				fprintf (hasil15,"\n Harga Sewa %d Videografer	: Rp. %d",jumlah_videografer, price_videografer);
+				fprintf (hasil15,"\n Opsi Tambahan	: Rp. %d", subtotal_opsi);
+				fprintf (hasil15,"\n Total Biaya	: Rp. %d", total);
+				fclose (hasil15);
+				if (total > 1000000){
+					printf ("\n 		Anda mendapatkan diskon sebesar 10 %!");
+					printf ("\n");
+					printf ("\n 		Potongan hagra : Rp. %d", diskon1);
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total1);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+					kembaliandisc1=bayar-total1;
+					printf ("\n		Kembalian : Rp. %d", kembaliandisc1);
+					//struk
+					FILE * hasil16;
+					hasil16=fopen("transaksi.txt","w");
+					fprintf (hasil16,"\n Potongan harga : Rp. %d", diskon1);
+					fprintf (hasil16,"\n Total Biaya : Rp. %d", total1);
+					fprintf (hasil16,"\n=============================================================================");
+					fprintf (hasil16,"\n Bayar : Rp. ");
+					fprintf (hasil16, "\n Kembalian : Rp. %d", kembaliandisc1);
+					fclose (hasil16);
+				}
+				else if (total > 5000000){
+					printf ("\n 		Anda mendapatkan diskon sebesar 20 %!");
+					printf ("\n");
+					printf ("\n 		Potongan hagra : Rp. %d", diskon2);
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total2);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+                    			kembaliandisc2=bayar-total2;
+					printf ("\n		Kembalian : Rp. %d", kembaliandisc2);
+					//struk
+					FILE * hasil17;
+					hasil17=fopen("transaksi.txt","w");
+					fprintf (hasil17,"\n Potongan harga : Rp. %d", diskon2);
+					fprintf (hasil17,"\n Total Biaya : Rp. %d", total2);
+					fprintf (hasil17,"\n=============================================================================");
+					fprintf (hasil17,"\n Bayar : Rp. ");
+					fprintf (hasil17, "\n Kembalian : Rp. %d", kembaliandisc2);
+					fclose (hasil17);
+				}
+				else {
+					printf ("\n 		Potongan hagra : Rp. -");
+					printf ("\n");
+					printf ("\n 		Total Biaya : Rp. %d", total);
+					printf ("\n");
+					printf ("\n=============================================================================");
+					printf ("\n 		Bayar : Rp. ");
+					scanf ("%d", &bayar);
+                    			kembalian=bayar-total;
+					printf ("\n			Kembalian : Rp. %d", kembalian);
+					//struk
+					FILE * hasil18;
+					hasil18=fopen("transaksi.txt","w");
+					fprintf (hasil18,"\n Potongan harga : Rp. %d", diskon1);
+					fprintf (hasil18,"\n Total Biaya : Rp. %d", total1);
+					fprintf (hasil18,"\n=============================================================================");
+					fprintf (hasil18,"\n Bayar : Rp. ");
+					fprintf (hasil18, "\n Kembalian : Rp. %d", kembaliandisc1);
+					fclose (hasil18);
+				}
+			}
+
 		}
-		
+
+
 		else {
 			printf ("! MOHON MASUKKAN KODE YANG SESUAI DENGAN NOMOR MENU !");
 		}
-		
+
 		printf ("\n\nReturn (R) or Quit (Q) : ");
-		scanf (" %c", &kembali);	
+		scanf (" %c", &kembali);
 	}
+	
+
 	return 0;
 }
-
